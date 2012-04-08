@@ -1,5 +1,5 @@
 require "naws/version"
 
-module Naws
-  # Your code goes here...
+module NAWS
+  autoload :RequestParser, 'naws/request_parser'
 end
