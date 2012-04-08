@@ -10,9 +10,9 @@ module NAWS
       line = socket.readline
       method, resource, http = line.split(' ')
       path, query = resource.split('?')
-      @env["HTTP_METHOD"] = method
+      @env["REQUEST_METHOD"] = method
       @env["HTTP_VERSION"] = http
-      @env["REQUEST_PATH"] = path
+      @env["REQUEST_PATH"] = @env["PATH_INFO"] = path
       @env["QUERY_STRING"] = query
     end
 

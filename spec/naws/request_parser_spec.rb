@@ -31,11 +31,11 @@ describe NAWS::RequestParser do
 
     it "sets method" do
       subject.parse_request_line(@socket)
-      subject.env["HTTP_METHOD"].should == "GET"
+      subject.env["REQUEST_METHOD"].should == "GET"
 
       @socket.make_example_post
       subject.parse_request_line(@socket)
-      subject.env["HTTP_METHOD"].should == "POST"
+      subject.env["REQUEST_METHOD"].should == "POST"
     end
 
     it "sets http version" do
@@ -54,6 +54,8 @@ describe NAWS::RequestParser do
       @socket.make_example_post
       subject.parse_request_line(@socket)
       subject.env["REQUEST_PATH"].should == "/a/post/url"
+
+      subject.env["PATH_INFO"].should == subject.env["REQUEST_PATH"]
     end
 
     it "sets query string" do
