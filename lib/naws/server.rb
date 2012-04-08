@@ -7,14 +7,18 @@ class NAWS::Server
     server = TCPServer.new 2000
     loop do
       client = server.accept
-      request = NAWS::RequestParser.new
-      request.parse_request_line(client)
-      request.parse_headers(client)
-      response = NAWS::ResponseSender.new(app.call(request.env))
-      response.send_status(client)
-      response.send_headers(client)
-      response.send_body(client)
-      client.close
+      Thread.new do
+        request = NAWS::RequestParser.new
+        request.parse_request_line(client)
+        request.parse_headers(client)
+        request.parse_body(client)
+        rack = app.call(request.env)
+        response = NAWS::ResponseSender.new(rack)
+        response.send_status(client)
+        response.send_headers(client)
+        response.send_body(client)
+        client.close
+      end
     end
   end
 end

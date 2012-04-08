@@ -14,6 +14,7 @@ module NAWS
       @env["HTTP_VERSION"] = http
       @env["REQUEST_PATH"] = @env["PATH_INFO"] = path
       @env["QUERY_STRING"] = query
+      @env["SCRIPT_NAME"] = ""
     end
 
     def parse_headers(socket)
@@ -25,6 +26,16 @@ module NAWS
         end
         break if line == "\r\n"
       end
+    end
+
+    def parse_body(socket)
+      body = StringIO.new
+      #while line = socket.readline
+      #  break if line == "\r\n"
+      #  body << line
+      #end
+      #body.rewind
+      @env['rack.input'] = body
     end
   end
 end

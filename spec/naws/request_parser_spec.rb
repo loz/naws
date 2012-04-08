@@ -19,6 +19,13 @@ Host: www.example.com\r
 \r\n
     REQUEST
   end
+  def make_body
+    self.string = <<-REQUEST
+Line1
+Line2
+Line3
+    REQUEST
+  end
 end
 
 describe NAWS::RequestParser do
@@ -82,4 +89,22 @@ describe NAWS::RequestParser do
       subject.env["HTTP_X_ANOTHER_HEADER"].should == "another header value"
     end
   end
+
+  describe :parse_body do
+    before :each do
+      @socket = MockSocket.new
+      @socket.make_body
+    end
+
+    it "sets rack.input to an IO for body" do
+      subject.parse_body(@socket)
+      input = subject.env['rack.input']
+      input.readline.should == "Line1\n"
+      input.readline.should == "Line2\n"
+      input.rewind
+      input.readline.should == "Line1\n"
+    end
+  end
+
+
 end

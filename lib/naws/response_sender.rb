@@ -10,12 +10,14 @@ module NAWS
 
     def send_headers(socket)
       @headers['Server'] = "NotAWebServer 0.0.1"
-      @headers.each { |h| socket.puts "%s: %s\r" % h }
+      @headers.each { |k, v| socket.puts "%s: %s\r" % [k, v] }
       socket.puts "\r"
     end
 
     def send_body(socket)
-      socket.print @body.join("\r\n")
+      @body.each do |b|
+        socket.print b
+      end
     end
   end
 end
