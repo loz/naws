@@ -30,11 +30,9 @@ module NAWS
 
     def parse_body(socket)
       body = StringIO.new
-      #while line = socket.readline
-      #  break if line == "\r\n"
-      #  body << line
-      #end
-      #body.rewind
+      length = @env["HTTP_CONTENT_LENGTH"]
+      body.string = socket.readpartial(length.to_i)
+      body.rewind
       @env['rack.input'] = body
     end
   end

@@ -74,7 +74,7 @@ describe NAWS::ResponseSender do
       @socket.string = ""
       another = described_class.new [404, {}, bodies]
       another.send_body(@socket)
-      @socket.string.should == "Body1\r\nBody2\r\nBody3"
+      @socket.string.should == "Body1Body2Body3"
     end
   end
 end

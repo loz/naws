@@ -25,6 +25,7 @@ Line1
 Line2
 Line3
     REQUEST
+    self.rewind
   end
 end
 
@@ -97,6 +98,7 @@ describe NAWS::RequestParser do
     end
 
     it "sets rack.input to an IO for body" do
+      subject.env["HTTP_CONTENT_LENGTH"] = @socket.string.length-1
       subject.parse_body(@socket)
       input = subject.env['rack.input']
       input.readline.should == "Line1\n"
